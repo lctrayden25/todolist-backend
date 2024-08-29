@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
+import { dbConnect } from "./config/db";
+import "dotenv/config";
 
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.SERVER_PORT || 3000;
 
 //get todo
 app.get("/", async (req: Request, res: Response) => {
@@ -17,6 +19,12 @@ app.delete("/:id", async (req: Request, res: Response) => {
 	res.send("delete todo");
 });
 
-app.listen(PORT, () => {
+app.get("/setup", async (req: Request, res: Response) => {
+	res.send("setup db");
+});
+
+app.listen(PORT, async () => {
+	await dbConnect();
+	console.log(process.env.SERVER_PORT);
 	console.log(`Server is running on PORT ${PORT}`);
 });
