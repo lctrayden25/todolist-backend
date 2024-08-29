@@ -8,7 +8,7 @@ const app: Express = express();
 const PORT = process.env.SERVER_PORT || 3002;
 
 const corsOptions = {
-	methods: "GET,PATCH,POST,DELETE",
+	methods: "GET,PUT,POST,DELETE",
 };
 
 app.use(cors(corsOptions));
