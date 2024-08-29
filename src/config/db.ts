@@ -1,8 +1,21 @@
-// postgres connect
 import pg from "pg";
-const { Client } = pg;
+const { Pool } = pg;
 
-const client = new Client({
+// const createSchema = async () => {
+// 	const query = `
+// 			CREATE TABLE IF NOT EXISTS todos (
+// 				id SERIAL PRIMARY KEY,
+// 				name VARCHAR(255) NOT NULL
+// 			);
+// 		`;
+
+// 	const res = await dbPool.query(query);
+// 	if (res) {
+// 		console.log("Database connected and table [todos] created if not exists");
+// 	}
+// };
+
+export const dbPool = new Pool({
 	user: process.env.DB_USER,
 	host: process.env.DB_HOST,
 	port: Number(process.env.DB_PORT),
@@ -11,11 +24,13 @@ const client = new Client({
 });
 
 export const dbConnect = async () => {
-	await client.connect();
-
-	const res = await client.query("SELECT $1::text as message", [
-		"Hello world!",
-	]);
-	console.log(res.rows[0].message); // Hello world!
-	await client.end();
+	try {
+		const res = await dbPool.connect();
+		// if (res) {
+		// 	await createSchema();
+		// }
+	} catch (error) {
+		console.log("Error: ", error);
+		throw error;
+	}
 };
