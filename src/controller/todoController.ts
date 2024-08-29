@@ -1,5 +1,6 @@
-import express, { Express, Request, Response } from "express";
+import { Request, Response } from "express";
 import { dbPool } from "../config/db";
+import { TodoStatus } from "../helper/enum";
 
 export const getTodoList = async (
 	req: Request,
@@ -18,11 +19,11 @@ export const createTodo = async (
 	res: Response
 ): Promise<Response<JSON>> => {
 	try {
-		const { name } = req.body;
+		const { name } = req.body as Request["body"];
 		const query = `
-			INSERT INTO todos (name) VALUES ($1) RETURNING *;
+			INSERT INTO todos (name, status) VALUES ($1, $2) RETURNING *;
 		`;
-		const result = await dbPool.query(query, [name]);
+		const result = await dbPool.query(query, [name, TodoStatus.Incomplete]);
 		return res.status(200).json({ result: result.rows[0] });
 	} catch (error) {
 		return res.status(502).json({ error: "Internal Server Error" });
@@ -34,8 +35,8 @@ export const updateTodo = async (
 	res: Response
 ): Promise<Response<JSON>> => {
 	try {
-		const { id } = req.params;
-		const { name, status } = req.body;
+		const { id } = req.params as Request["params"];
+		const { name, status } = req.body as Request["body"];
 		const updateQuery = `UPDATE todos SET name = $1, status = $2 WHERE id = $3 RETURNING *`;
 		const result = await dbPool.query(updateQuery, [name, status, id]);
 		if (result?.rows?.length === 0) {
@@ -52,7 +53,9 @@ export const deleteTodo = async (
 	res: Response
 ): Promise<Response<JSON>> => {
 	try {
-		const { id } = req.params;
+		const { id } = req.params as Request["params"];
+		if (!id) return res.status(404).json({ error: "Missing todo ID" });
+
 		const deleteQuery = `DELETE FROM todos where id = $1 returning *`;
 		const result = await dbPool.query(deleteQuery, [id]);
 		if (result.rows.length === 0) {
