@@ -21,6 +21,9 @@ export const dbPool = new Pool({
 	port: Number(process.env.DB_PORT),
 	password: process.env.DB_PASSWORD,
 	database: process.env.DB_DATABASE,
+	// ssl: {
+	// 	rejectUnauthorized: process.env.NODE_ENV !== "development",
+	// },
 });
 
 export const dbConnect = async () => {

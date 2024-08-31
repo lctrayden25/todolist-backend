@@ -10,7 +10,7 @@ export const getTodoList = async (
 		const result = await dbPool.query("SELECT * FROM todos");
 		return res.status(200).json({ data: result.rows ?? [] });
 	} catch (error) {
-		return res.status(502).json({ error: "Internal Server Error" });
+		return res.status(502).json({ error });
 	}
 };
 
@@ -23,10 +23,11 @@ export const createTodo = async (
 		const query = `
 			INSERT INTO todos (name, status) VALUES ($1, $2) RETURNING *;
 		`;
+		console.log("name: ", name);
 		const result = await dbPool.query(query, [name, TodoStatus.Incomplete]);
 		return res.status(200).json({ result: result.rows[0] });
 	} catch (error) {
-		return res.status(502).json({ error: "Internal Server Error" });
+		return res.status(502).json({ error });
 	}
 };
 
@@ -44,7 +45,7 @@ export const updateTodo = async (
 		}
 		return res.status(200).json({ result: result.rows[0] });
 	} catch (error) {
-		return res.status(502).json({ error: "Internal Server Error" });
+		return res.status(502).json({ error: error });
 	}
 };
 
@@ -64,6 +65,6 @@ export const deleteTodo = async (
 
 		return res.status(200).json({ result: result.rows[0] });
 	} catch (error) {
-		return res.status(502).json({ error: "Internal Server Error" });
+		return res.status(502).json({ error: error });
 	}
 };
