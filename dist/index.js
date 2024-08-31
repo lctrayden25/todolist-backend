@@ -13,18 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const db_1 = require("./config/db");
+const todoRouter_1 = __importDefault(require("./router/todoRouter"));
+require("dotenv/config");
 const app = (0, express_1.default)();
-const PORT = 3000;
-//get todo
-app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("fetch todos");
+const PORT = process.env.SERVER_PORT || 3002;
+const corsOptions = {
+    methods: "GET,PUT,POST,DELETE",
+};
+app.use((0, cors_1.default)(corsOptions));
+app.use(express_1.default.json());
+// router
+app.use("/api/", todoRouter_1.default);
+// start server
+app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, db_1.dbConnect)();
+    console.log(`Server is running on PORT ${PORT} and DB running on PORT ${process.env.DB_PORT}`);
 }));
-app.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("create todo");
-}));
-app.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("delete todo");
-}));
-app.listen(PORT, () => {
-    console.log(`Server is running on PORT ${PORT}`);
-});

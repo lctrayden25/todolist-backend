@@ -37,9 +37,10 @@ export const updateTodo = async (
 ): Promise<Response<JSON>> => {
 	try {
 		const { id } = req.params as Request["params"];
-		const { name, status } = req.body as Request["body"];
-		const updateQuery = `UPDATE todos SET name = $1, status = $2 WHERE id = $3 RETURNING *`;
-		const result = await dbPool.query(updateQuery, [name, status, id]);
+		// const { name, status } = req.body as Request["body"];
+		const updateQuery = `UPDATE todos SET status = $1 WHERE id = $2 RETURNING *`;
+		const result = await dbPool.query(updateQuery, [TodoStatus.Complete, id]);
+		console.log("result: ", result);
 		if (result?.rows?.length === 0) {
 			return res.status(404).json({ error: "No results" });
 		}
