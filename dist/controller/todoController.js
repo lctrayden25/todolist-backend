@@ -29,7 +29,6 @@ const createTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const query = `
 			INSERT INTO todos (name, status) VALUES ($1, $2) RETURNING *;
 		`;
-        console.log("name: ", name);
         const result = yield db_1.dbPool.query(query, [name, enum_1.TodoStatus.Incomplete]);
         return res.status(200).json({ result: result.rows[0] });
     }

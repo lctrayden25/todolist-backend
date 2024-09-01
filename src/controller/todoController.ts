@@ -23,7 +23,6 @@ export const createTodo = async (
 		const query = `
 			INSERT INTO todos (name, status) VALUES ($1, $2) RETURNING *;
 		`;
-		console.log("name: ", name);
 		const result = await dbPool.query(query, [name, TodoStatus.Incomplete]);
 		return res.status(200).json({ result: result.rows[0] });
 	} catch (error) {

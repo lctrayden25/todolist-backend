@@ -16,14 +16,12 @@ const { Pool } = pg;
 // };
 
 export const dbPool = new Pool({
-	user: process.env.DB_USER,
-	host: process.env.DB_HOST,
-	port: Number(process.env.DB_PORT),
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_DATABASE,
-	// ssl: {
-	// 	rejectUnauthorized: process.env.NODE_ENV !== "development",
-	// },
+	// user: process.env.DB_USER,
+	// host: process.env.DB_HOST,
+	// port: Number(process.env.DB_PORT),
+	// password: process.env.DB_PASSWORD,
+	// database: process.env.DB_DATABASE,
+	connectionString: process.env.SERVER_API_URL,
 });
 
 export const dbConnect = async () => {
