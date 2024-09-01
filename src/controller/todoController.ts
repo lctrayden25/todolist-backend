@@ -40,7 +40,7 @@ export const updateTodo = async (
 		// const { name, status } = req.body as Request["body"];
 		const updateQuery = `UPDATE todos SET status = $1 WHERE id = $2 RETURNING *`;
 		const result = await dbPool.query(updateQuery, [TodoStatus.Complete, id]);
-		console.log("result: ", result);
+
 		if (result?.rows?.length === 0) {
 			return res.status(404).json({ error: "No results" });
 		}
@@ -65,6 +65,20 @@ export const deleteTodo = async (
 		}
 
 		return res.status(200).json({ result: result.rows[0] });
+	} catch (error) {
+		return res.status(502).json({ error });
+	}
+};
+
+export const deleteAllTodo = async (
+	req: Request,
+	res: Response
+): Promise<Response<JSON>> => {
+	try {
+		const { status } = req?.params as Request["params"];
+		const query = `DELETE * FROM todos where status = $1 returning *`;
+		const result = await dbPool.query(query, [status]);
+		return res.status(200).json({ deleted: true });
 	} catch (error) {
 		return res.status(502).json({ error });
 	}

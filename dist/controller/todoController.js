@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTodo = exports.updateTodo = exports.createTodo = exports.getTodoList = void 0;
+exports.deleteAllTodo = exports.deleteTodo = exports.updateTodo = exports.createTodo = exports.getTodoList = void 0;
 const db_1 = require("../config/db");
 const enum_1 = require("../helper/enum");
 const getTodoList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,6 +26,8 @@ exports.getTodoList = getTodoList;
 const createTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name } = req.body;
+        if (!name)
+            return res.status(200).json({ error: "Missing todo item." });
         const query = `
 			INSERT INTO todos (name, status) VALUES ($1, $2) RETURNING *;
 		`;
@@ -44,14 +46,13 @@ const updateTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         // const { name, status } = req.body as Request["body"];
         const updateQuery = `UPDATE todos SET status = $1 WHERE id = $2 RETURNING *`;
         const result = yield db_1.dbPool.query(updateQuery, [enum_1.TodoStatus.Complete, id]);
-        console.log("result: ", result);
         if (((_a = result === null || result === void 0 ? void 0 : result.rows) === null || _a === void 0 ? void 0 : _a.length) === 0) {
             return res.status(404).json({ error: "No results" });
         }
         return res.status(200).json({ result: result.rows[0] });
     }
     catch (error) {
-        return res.status(502).json({ error: error });
+        return res.status(502).json({ error });
     }
 });
 exports.updateTodo = updateTodo;
@@ -68,7 +69,19 @@ const deleteTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         return res.status(200).json({ result: result.rows[0] });
     }
     catch (error) {
-        return res.status(502).json({ error: error });
+        return res.status(502).json({ error });
     }
 });
 exports.deleteTodo = deleteTodo;
+const deleteAllTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { status } = req === null || req === void 0 ? void 0 : req.params;
+        const query = `DELETE * FROM todos where status = $1 returning *`;
+        const result = yield db_1.dbPool.query(query, [status]);
+        return res.status(200).json({ deleted: true });
+    }
+    catch (error) {
+        return res.status(502).json({ error });
+    }
+});
+exports.deleteAllTodo = deleteAllTodo;

@@ -1,6 +1,7 @@
 import express from "express";
 import {
 	createTodo,
+	deleteAllTodo,
 	deleteTodo,
 	getTodoList,
 	updateTodo,
@@ -12,5 +13,6 @@ todoRouter.get("/", getTodoList);
 todoRouter.post("/", createTodo);
 todoRouter.put("/:id", updateTodo);
 todoRouter.delete("/:id", deleteTodo);
+todoRouter.delete("/:status", deleteAllTodo);
 
 export default todoRouter;

@@ -5,6 +5,4 @@ var TodoStatus;
 (function (TodoStatus) {
     TodoStatus["Complete"] = "complete";
     TodoStatus["Incomplete"] = "incomplete";
-    TodoStatus["Active"] = "active";
-    TodoStatus["Inactive"] = "inactive";
 })(TodoStatus || (exports.TodoStatus = TodoStatus = {}));
