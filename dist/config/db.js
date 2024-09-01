@@ -15,32 +15,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.dbConnect = exports.dbPool = void 0;
 const pg_1 = __importDefault(require("pg"));
 const { Pool } = pg_1.default;
-// const createSchema = async () => {
-// 	const query = `
-// 			CREATE TABLE IF NOT EXISTS todos (
-// 				id SERIAL PRIMARY KEY,
-// 				name VARCHAR(255) NOT NULL
-// 			);
-// 		`;
-// 	const res = await dbPool.query(query);
-// 	if (res) {
-// 		console.log("Database connected and table [todos] created if not exists");
-// 	}
-// };
 exports.dbPool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
+    // ssl: true,
     // connectionString: process.env.SERVER_API_URL,
 });
 const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const res = yield exports.dbPool.connect();
-        // if (res) {
-        // 	await createSchema();
-        // }
+        yield exports.dbPool.connect();
+        const query = `Create Table IF NOT EXISTS todos (
+			id SERIAL PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			status VARCHAR(50) NOT NULL
+		) `;
+        yield exports.dbPool.query(query);
     }
     catch (error) {
         console.log("Error: ", error);
