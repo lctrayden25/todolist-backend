@@ -25,7 +25,10 @@ const corsOptions = {
 app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 // router
-app.use("/api/", todoRouter_1.default);
+app.use("/api", todoRouter_1.default);
+app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    return res.status(200).json("ok");
+}));
 // start server
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_1.dbConnect)();
