@@ -30,7 +30,10 @@ const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
         const query = `Create Table IF NOT EXISTS todos (
 			id SERIAL PRIMARY KEY,
 			name VARCHAR(255) NOT NULL,
-			status VARCHAR(50) NOT NULL
+			status VARCHAR(50) NOT NULL,
+			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+			updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+			completed_at TIMESTAMPTZ
 		) `;
         yield exports.dbPool.query(query);
     }

@@ -20,6 +20,7 @@ export const createTodo = async (
 ): Promise<Response<JSON>> => {
 	try {
 		const { name } = req.body as Request["body"];
+		if (!name) return res.status(200).json({ error: "Missing todo item." });
 		const query = `
 			INSERT INTO todos (name, status) VALUES ($1, $2) RETURNING *;
 		`;
@@ -45,7 +46,7 @@ export const updateTodo = async (
 		}
 		return res.status(200).json({ result: result.rows[0] });
 	} catch (error) {
-		return res.status(502).json({ error: error });
+		return res.status(502).json({ error });
 	}
 };
 
@@ -65,6 +66,6 @@ export const deleteTodo = async (
 
 		return res.status(200).json({ result: result.rows[0] });
 	} catch (error) {
-		return res.status(502).json({ error: error });
+		return res.status(502).json({ error });
 	}
 };

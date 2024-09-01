@@ -14,12 +14,16 @@ export const dbPool = new Pool({
 export const dbConnect = async () => {
 	try {
 		await dbPool.connect();
-		const query = `Create Table IF NOT EXISTS todos (
-			id SERIAL PRIMARY KEY,
+		const query = `CREATE TABLE IF NOT EXISTS todos (
+			id SERIAL PRIMARY KEY NOT NULL,
 			name VARCHAR(255) NOT NULL,
-			status VARCHAR(50) NOT NULL
+			status VARCHAR(50) NOT NULL,
+			created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+			updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+			completed_at TIMESTAMPTZ
 		) `;
-		await dbPool.query(query);
+
+		const res = await dbPool.query(query);
 	} catch (error) {
 		console.log("Error: ", error);
 		throw error;
