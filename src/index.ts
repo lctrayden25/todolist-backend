@@ -15,7 +15,11 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // router
-app.use("/", todoRouter);
+app.use("/api", todoRouter);
+
+app.get("/", async (req: Request, res: Response) => {
+	return res.status(200).json("ok");
+});
 
 // start server
 app.listen(PORT, async (): Promise<void> => {
