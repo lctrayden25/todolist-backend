@@ -4,7 +4,7 @@ import { dbConnect, dbPool } from "./config/db";
 import todoRouter from "./router/todoRouter";
 import "dotenv/config";
 
-const app: Express = express();
+export const app: Express = express();
 const PORT = process.env.SERVER_PORT || 3002;
 
 const corsOptions = {
@@ -17,6 +17,7 @@ app.use(express.json());
 // router
 app.use("/api", todoRouter);
 
+// health check
 app.get("/", async (req: Request, res: Response) => {
 	return res.status(200).json("ok");
 });

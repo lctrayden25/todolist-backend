@@ -37,7 +37,6 @@ export const updateTodo = async (
 ): Promise<Response<JSON>> => {
 	try {
 		const { id } = req.params as Request["params"];
-		// const { name, status } = req.body as Request["body"];
 		const updateQuery = `UPDATE todos SET status = $1 WHERE id = $2 RETURNING *`;
 		const result = await dbPool.query(updateQuery, [TodoStatus.Complete, id]);
 
@@ -63,7 +62,7 @@ export const deleteTodo = async (
 		if (result.rows.length === 0) {
 			return res.status(404).json({ error: `Todo [ID: ${id}] not found` });
 		}
-		return res.status(200).json({ result: result.rows[0] });
+		return res.status(200).json({ delete: true });
 	} catch (error) {
 		return res.status(502).json({ error });
 	}
@@ -72,9 +71,11 @@ export const deleteTodo = async (
 export const deleteAllTodo = async (req: Request, res: Response) => {
 	try {
 		const { status } = req.params as Request["params"];
+		if (!status)
+			return res.status(200).json({ error: "Missing status to update" });
 		const query = `DELETE FROM todos WHERE status = $1 returning *`;
 		const result = await dbPool.query(query, [status]);
-		return res.status(200).json({ result: result.rows });
+		return res.status(200).json({ delete: true });
 	} catch (error) {
 		return res.status(502).json({ error });
 	}
