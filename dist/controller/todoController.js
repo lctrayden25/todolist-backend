@@ -76,7 +76,7 @@ exports.deleteTodo = deleteTodo;
 const deleteAllTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { status } = req === null || req === void 0 ? void 0 : req.params;
-        const query = `DELETE * FROM todos where status = $1 returning *`;
+        const query = `DELETE FROM todos WHERE status IN ($1) returning *`;
         const result = yield db_1.dbPool.query(query, [status]);
         return res.status(200).json({ deleted: true });
     }
