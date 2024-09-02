@@ -1,6 +1,6 @@
 import request from "supertest";
-import { app } from "../src/index";
-import { TodoStatus } from "../src/helper/enum";
+import { app } from "..";
+import { TodoStatus } from "../helper/enum";
 
 describe("Todo GET /api", () => {
 	const todoGetRequest = () => request(app).get("/api");
