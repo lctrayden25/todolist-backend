@@ -41,9 +41,14 @@ const createTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.createTodo = createTodo;
 const updateTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
+    const now = new Date();
+    const parsedDate = dayjs(now);
     try {
         const { id } = req.params;
-        const updateQuery = `UPDATE todos SET status = $1 WHERE id = $2 RETURNING *`;
+        if (!id) {
+            return res.status(422).json({ error: "Missing todo ID" });
+        }
+        const updateQuery = `UPDATE todos SET status = $1, completed_at = $3 WHERE id = $2 RETURNING *`;
         const result = yield db_1.dbPool.query(updateQuery, [enum_1.TodoStatus.Complete, id]);
         if (((_a = result === null || result === void 0 ? void 0 : result.rows) === null || _a === void 0 ? void 0 : _a.length) === 0) {
             return res.status(404).json({ error: "No results" });

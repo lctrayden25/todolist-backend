@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 import { dbPool } from "../config/db";
 import { TodoStatus } from "../helper/enum";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const getTodoList = async (
 	req: Request,
@@ -36,9 +42,17 @@ export const updateTodo = async (
 	res: Response
 ): Promise<Response<JSON>> => {
 	try {
+		const now = dayjs().tz("Asia/Hong_Kong").format("YYYY-MM-DD HH:mm:ss.SSSZ");
 		const { id } = req.params as Request["params"];
-		const updateQuery = `UPDATE todos SET status = $1 WHERE id = $2 RETURNING *`;
-		const result = await dbPool.query(updateQuery, [TodoStatus.Complete, id]);
+		if (!id) {
+			return res.status(422).json({ error: "Missing todo ID" });
+		}
+		const updateQuery = `UPDATE todos SET status = $1, completed_at = $3, updated_at = $3 WHERE id = $2 RETURNING *`;
+		const result = await dbPool.query(updateQuery, [
+			TodoStatus.Complete,
+			id,
+			now,
+		]);
 
 		if (result?.rows?.length === 0) {
 			return res.status(404).json({ error: "No results" });
