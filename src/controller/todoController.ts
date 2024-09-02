@@ -71,10 +71,10 @@ export const deleteTodo = async (
 
 export const deleteAllTodo = async (req: Request, res: Response) => {
 	try {
-		const { status } = req?.params as Request["params"];
-		const query = `DELETE FROM todos WHERE status IN ($1) returning *`;
+		const { status } = req.params as Request["params"];
+		const query = `DELETE FROM todos WHERE status = $1 returning *`;
 		const result = await dbPool.query(query, [status]);
-		return res.status(200).json({ deleted: true });
+		return res.status(200).json({ result: result.rows });
 	} catch (error) {
 		return res.status(502).json({ error });
 	}

@@ -59,6 +59,7 @@ exports.updateTodo = updateTodo;
 const deleteTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
+        console.log("id: ", id);
         if (!id)
             return res.status(404).json({ error: "Missing todo ID" });
         const deleteQuery = `DELETE FROM todos where id = $1 returning *`;
@@ -75,10 +76,10 @@ const deleteTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.deleteTodo = deleteTodo;
 const deleteAllTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { status } = req === null || req === void 0 ? void 0 : req.params;
-        const query = `DELETE FROM todos WHERE status IN ($1) returning *`;
+        const { status } = req.params;
+        const query = `DELETE FROM todos WHERE status = $1 returning *`;
         const result = yield db_1.dbPool.query(query, [status]);
-        return res.status(200).json({ deleted: true });
+        return res.status(200).json({ result: result.rows });
     }
     catch (error) {
         return res.status(502).json({ error });

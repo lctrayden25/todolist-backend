@@ -9,6 +9,6 @@ const todoRouter = express_1.default.Router();
 todoRouter.get("/", todoController_1.getTodoList);
 todoRouter.post("/", todoController_1.createTodo);
 todoRouter.put("/:id", todoController_1.updateTodo);
-todoRouter.delete("/:id", todoController_1.deleteTodo);
-todoRouter.delete("/:status", todoController_1.deleteAllTodo);
+todoRouter.delete("/id/:id", todoController_1.deleteTodo);
+todoRouter.delete("/status/:status", todoController_1.deleteAllTodo);
 exports.default = todoRouter;

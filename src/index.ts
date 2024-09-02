@@ -1,6 +1,6 @@
 import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
-import { dbConnect } from "./config/db";
+import { dbConnect, dbPool } from "./config/db";
 import todoRouter from "./router/todoRouter";
 import "dotenv/config";
 
