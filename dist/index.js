@@ -21,6 +21,7 @@ require("dotenv/config");
 exports.app = (0, express_1.default)();
 const PORT = process.env.SERVER_PORT || 3002;
 const corsOptions = {
+    origin: "*",
     methods: "GET,PUT,POST,DELETE",
 };
 exports.app.use((0, cors_1.default)(corsOptions));

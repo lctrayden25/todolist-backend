@@ -57,6 +57,7 @@ export const updateTodo = async (
 		if (result?.rows?.length === 0) {
 			return res.status(404).json({ error: "No results" });
 		}
+		res.setHeader("Access-Control-Allow-Origin", "*");
 		return res.status(200).json({ result: result.rows[0] });
 	} catch (error) {
 		return res.status(502).json({ error });

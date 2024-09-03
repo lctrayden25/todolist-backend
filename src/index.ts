@@ -8,6 +8,7 @@ export const app: Express = express();
 const PORT = process.env.SERVER_PORT || 3002;
 
 const corsOptions = {
+	origin: "*",
 	methods: "GET,PUT,POST,DELETE",
 };
 
