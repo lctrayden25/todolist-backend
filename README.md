@@ -3,7 +3,8 @@
 ## Getting Started
 
 ```bash
-npm run dev  #start the server with hot reload
+1. npm install  #install node module
+2. npm run dev  #start the server with hot reload
 
 npm test  #start the unit test
 

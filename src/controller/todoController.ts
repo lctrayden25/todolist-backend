@@ -86,7 +86,7 @@ export const deleteAllTodo = async (req: Request, res: Response) => {
 	try {
 		const { status } = req.params as Request["params"];
 		if (!status)
-			return res.status(200).json({ error: "Missing status to update" });
+			return res.status(200).json({ error: "Missing status value to delete" });
 		const query = `DELETE FROM todos WHERE status = $1 returning *`;
 		const result = await dbPool.query(query, [status]);
 		return res.status(200).json({ delete: true });
